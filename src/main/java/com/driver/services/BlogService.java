@@ -9,6 +9,7 @@ import com.driver.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,11 +24,24 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
+        Blog blog= new Blog();
+        User user = userRepository1.findById(userId).get();
+        blog.setPubishedDate(new Date());
+        blog.setTitle(title);
+        blog.setContent(content);
+        blog.setUser(user);
+        List<Blog> blogs = user.getBlogs();
+        blogs.add(blog);
+        user.setBlogs(blogs);
+        userRepository1.save(user);
+        return blog;
 
     }
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
+        blogRepository1.deleteById(blogId);
+
 
     }
 }
